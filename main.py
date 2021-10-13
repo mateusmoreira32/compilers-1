@@ -1,48 +1,38 @@
-email = 'guihss.cs@gmail.com'
+from interpreter import Interpreter
+from parser import parser
+from lx import lexer
 
+with open('code.m', 'r') as f:
+    t = parser.parse(f.read())
+# for q in t:
+#     print(q)
 
-# Exemplo
-def verify_email(email):
-    prefix = True
-    domain = False
+def dps(tree, w):
+    if type(tree) is not tuple:
+        w.append(tree)
+        return
+    dps(tree[0], w)
+    dps(tree[1], w)
+    if len(tree) > 2:
+        w.append(tree[2])
 
-    for c in list(email):
+code = []
 
-        if prefix:
+for s in t:
+    q = []
+    dps(s, q)
+    code.extend(q)
 
-            if c.isalnum() or c == '.':
-                continue
-            elif c == '@':
-                prefix = False
-                domain = True
-                continue
-            else:
-                print(c, 'is invalid')
-                return False
+print('code ---------------')
+for c in code:
+    print(c)
 
-        elif domain:
+print('execution --------------')
+interpreter = Interpreter(code=code)
 
-            if c.isalnum() or c == '.':
-                continue
+interpreter.start()
 
-            else:
-                print(c, 'is invalid')
-                return False
+print(interpreter.stack)
+print(interpreter.heap)
 
-
-    if prefix:
-        return False
-
-    return True
-
-
-def verify_date(date):
-
-    pass
-
-
-
-def toInt(number):
-
-    pass
 
