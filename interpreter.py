@@ -3,35 +3,67 @@ import operator
 
 class Interpreter:
 
-    def __init__(self, code):
-        self.heap = [0] * 10
+    def __init__(self, code, memorySize):
+        self.heap = [0] * memorySize
         self.stack = []
         self.code = code
+        self.pc = 0
         self.functions = {
-            'ADD': (operator.add, 2),
-            'SUB': (operator.sub, 2),
-            'MUL': (operator.mul, 2),
-            'DIV': (operator.truediv, 2),
-            'PUSH': (self.push, 1),
-            'POP': (self.pop, 1)
+            'ADD': self.add,
+            'SUB': self.sub,
+            'MUL': self.mul,
+            'DIV': self.div,
+            'PUSH': self.push,
+            'POP': self.pop,
+            'LT': self.lt,
+            'JUMP': self.jump
         }
 
     def start(self):
-        for token in self.code:
-            if type(token) is int:
-                self.stack.append(token)
-            else:
-                params = []
-                for _ in range(self.functions[token][1]):
-                    params.insert(0, self.stack.pop())
-
-                result = self.functions[token][0](*params)
-                if result is not None:
-                    self.stack.append(result)
+        while self.pc < len(self.code):
+            line = self.code[self.pc]
+            self.pc += 1
+            self.functions[line[0]](line)
 
 
     def push(self, s):
-        self.heap[s] = self.stack.pop()
+        if s[1] == 'CONSTANT':
+            self.stack.append(s[2])
+        elif s[1] == 'LOCAL':
+            self.stack.append(self.heap[s[2]])
+
 
     def pop(self, s):
-        self.stack.append(self.heap[s])
+        if s[1] == 'LOCAL':
+            self.heap[s[2]] = self.stack.pop()
+
+    def add(self, s):
+        a2 = self.stack.pop()
+        a1 = self.stack.pop()
+        self.stack.append(a1 + a2)
+
+    def sub(self, s):
+        a2 = self.stack.pop()
+        a1 = self.stack.pop()
+        self.stack.append(a1 - a2)
+
+    def mul(self, s):
+        a2 = self.stack.pop()
+        a1 = self.stack.pop()
+        self.stack.append(a1 * a2)
+
+    def div(self, s):
+        a2 = self.stack.pop()
+        a1 = self.stack.pop()
+        self.stack.append(a1 / a2)
+
+    def lt(self, s):
+        a2 = self.stack.pop()
+        a1 = self.stack.pop()
+        self.stack.append(a1 < a2)
+
+    def jump(self, s):
+        if s[1] == 'NOT':
+            v = self.stack.pop()
+            if not v:
+                self.pc = s[2]

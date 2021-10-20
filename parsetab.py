@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEATTRIB DIVIDE ID LPAREN MINUS NUMBER PLUS RPAREN SEMICOLON TIMESstatements : statement statements\n                | empty\n    statement : attrib empty : attrib : ID ATTRIB expression SEMICOLONexpression : expression PLUS expressionexpression : expression MINUS expressionexpression : termterm : term TIMES termterm : term DIVIDE termterm : NUMBERterm : IDterm : LPAREN expression RPAREN'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEATTRIB DIVIDE ID IF LBR LPAREN LT MINUS NUMBER PLUS RBR RPAREN SEMICOLON TIMESstatements : statement statements\n                | empty\n    statement : attrib\n                | if empty : if : IF LPAREN logic RPAREN LBR statements RBRattrib : ID ATTRIB logic SEMICOLONlogic : logic LT logiclogic : expressionexpression : expression PLUS expressionexpression : expression MINUS expressionexpression : termterm : term TIMES termterm : term DIVIDE termterm : NUMBERterm : IDterm : LPAREN expression RPAREN'
     
-_lr_action_items = {'$end':([0,1,2,3,4,6,13,],[-4,0,-4,-2,-3,-1,-5,]),'ID':([0,2,4,7,12,13,14,15,16,17,],[5,5,-3,8,8,-5,8,8,8,8,]),'ATTRIB':([5,],[7,]),'NUMBER':([7,12,14,15,16,17,],[11,11,11,11,11,11,]),'LPAREN':([7,12,14,15,16,17,],[12,12,12,12,12,12,]),'TIMES':([8,10,11,21,22,23,],[-12,16,-11,-9,-10,-13,]),'DIVIDE':([8,10,11,21,22,23,],[-12,17,-11,-9,-10,-13,]),'SEMICOLON':([8,9,10,11,19,20,21,22,23,],[-12,13,-8,-11,-6,-7,-9,-10,-13,]),'PLUS':([8,9,10,11,18,19,20,21,22,23,],[-12,14,-8,-11,14,-6,-7,-9,-10,-13,]),'MINUS':([8,9,10,11,18,19,20,21,22,23,],[-12,15,-8,-11,15,-6,-7,-9,-10,-13,]),'RPAREN':([8,10,11,18,19,20,21,22,23,],[-12,-8,-11,23,-6,-7,-9,-10,-13,]),}
+_lr_action_items = {'$end':([0,1,2,3,4,5,8,18,34,],[-5,0,-5,-2,-3,-4,-1,-7,-6,]),'ID':([0,2,4,5,9,10,16,18,19,20,21,22,23,32,34,],[6,6,-3,-4,11,11,11,-7,11,11,11,11,11,6,-6,]),'IF':([0,2,4,5,18,32,34,],[7,7,-3,-4,-7,7,-6,]),'RBR':([2,3,4,5,8,18,32,33,34,],[-5,-2,-3,-4,-1,-7,-5,34,-6,]),'ATTRIB':([6,],[9,]),'LPAREN':([7,9,10,16,19,20,21,22,23,],[10,16,16,16,16,16,16,16,16,]),'NUMBER':([9,10,16,19,20,21,22,23,],[15,15,15,15,15,15,15,15,]),'TIMES':([11,14,15,29,30,31,],[-16,22,-15,-13,-14,-17,]),'DIVIDE':([11,14,15,29,30,31,],[-16,23,-15,-13,-14,-17,]),'PLUS':([11,13,14,15,24,27,28,29,30,31,],[-16,20,-12,-15,20,-10,-11,-13,-14,-17,]),'MINUS':([11,13,14,15,24,27,28,29,30,31,],[-16,21,-12,-15,21,-10,-11,-13,-14,-17,]),'SEMICOLON':([11,12,13,14,15,26,27,28,29,30,31,],[-16,18,-9,-12,-15,-8,-10,-11,-13,-14,-17,]),'LT':([11,12,13,14,15,17,26,27,28,29,30,31,],[-16,19,-9,-12,-15,19,19,-10,-11,-13,-14,-17,]),'RPAREN':([11,13,14,15,17,24,26,27,28,29,30,31,],[-16,-9,-12,-15,25,31,-8,-10,-11,-13,-14,-17,]),'LBR':([25,],[32,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statements':([0,2,],[1,6,]),'statement':([0,2,],[2,2,]),'empty':([0,2,],[3,3,]),'attrib':([0,2,],[4,4,]),'expression':([7,12,14,15,],[9,18,19,20,]),'term':([7,12,14,15,16,17,],[10,10,10,10,21,22,]),}
+_lr_goto_items = {'statements':([0,2,32,],[1,8,33,]),'statement':([0,2,32,],[2,2,2,]),'empty':([0,2,32,],[3,3,3,]),'attrib':([0,2,32,],[4,4,4,]),'if':([0,2,32,],[5,5,5,]),'logic':([9,10,19,],[12,17,26,]),'expression':([9,10,16,19,20,21,],[13,13,24,13,27,28,]),'term':([9,10,16,19,20,21,22,23,],[14,14,14,14,14,14,29,30,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,17 +27,21 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statements","S'",1,None,None,None),
-  ('statements -> statement statements','statements',2,'p_s','parser.py',15),
-  ('statements -> empty','statements',1,'p_s','parser.py',16),
+  ('statements -> statement statements','statements',2,'p_s','parser.py',14),
+  ('statements -> empty','statements',1,'p_s','parser.py',15),
   ('statement -> attrib','statement',1,'p_statement','parser.py',22),
-  ('empty -> <empty>','empty',0,'p_empty','parser.py',26),
-  ('attrib -> ID ATTRIB expression SEMICOLON','attrib',4,'p_attrib','parser.py',30),
-  ('expression -> expression PLUS expression','expression',3,'p_e','parser.py',38),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_minus','parser.py',43),
-  ('expression -> term','expression',1,'p_expression_term','parser.py',48),
-  ('term -> term TIMES term','term',3,'p_term','parser.py',52),
-  ('term -> term DIVIDE term','term',3,'p_term_div','parser.py',58),
-  ('term -> NUMBER','term',1,'p_term_number','parser.py',63),
-  ('term -> ID','term',1,'p_term_id','parser.py',67),
-  ('term -> LPAREN expression RPAREN','term',3,'p_paren','parser.py',73),
+  ('statement -> if','statement',1,'p_statement','parser.py',23),
+  ('empty -> <empty>','empty',0,'p_empty','parser.py',27),
+  ('if -> IF LPAREN logic RPAREN LBR statements RBR','if',7,'p_if','parser.py',31),
+  ('attrib -> ID ATTRIB logic SEMICOLON','attrib',4,'p_attrib','parser.py',35),
+  ('logic -> logic LT logic','logic',3,'p_logic','parser.py',43),
+  ('logic -> expression','logic',1,'p_logic_expression','parser.py',47),
+  ('expression -> expression PLUS expression','expression',3,'p_e','parser.py',51),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_minus','parser.py',55),
+  ('expression -> term','expression',1,'p_expression_term','parser.py',60),
+  ('term -> term TIMES term','term',3,'p_term','parser.py',64),
+  ('term -> term DIVIDE term','term',3,'p_term_div','parser.py',70),
+  ('term -> NUMBER','term',1,'p_term_number','parser.py',75),
+  ('term -> ID','term',1,'p_term_id','parser.py',79),
+  ('term -> LPAREN expression RPAREN','term',3,'p_paren','parser.py',85),
 ]
