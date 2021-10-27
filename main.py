@@ -23,12 +23,22 @@ def dps(tree, w):
             else:
                 dps(tree[3], w)
                 w.append((tree[0], tree[1], tree[2]))
+
     elif tree[0] == 'IF':
         dps(tree[1], w)
         w.append(tree[2])
         for s in tree[3]:
             dps(s, w)
         w.append(tree[4])
+
+    elif tree[0] == 'WHILE':
+        w.append(tree[1])
+        dps(tree[2], w)
+        w.append(tree[3])
+        for s in tree[4]:
+            dps(s, w)
+        w.append(tree[5])
+        w.append(tree[6])
 
 
 code = []

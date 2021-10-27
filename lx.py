@@ -7,7 +7,7 @@
 import ply.lex as lex
 
 
-keywords = {'if'}
+keywords = {'if', 'while', 'func', 'return'}
 
 # List of token names.   This is always required
 tokens = (
@@ -22,9 +22,13 @@ tokens = (
     'ATTRIB',
     'SEMICOLON',
     'IF',
+    'WHILE',
     'LBR',
     'RBR',
-    'LT'
+    'LT',
+    'COMMA',
+    'FUNC',
+    'RETURN'
 )
 
 # Regular expression rules for simple tokens
@@ -39,6 +43,7 @@ t_SEMICOLON = r';'
 t_LBR = r'{'
 t_RBR = r'}'
 t_LT = r'<'
+t_COMMA = r','
 
 # A regular expression rule with some action code
 def t_NUMBER(t):
@@ -48,7 +53,7 @@ def t_NUMBER(t):
 def t_ID(t):
     r'[a-zA-Z_]\w*'
     if t.value in keywords:
-        t.type = 'IF'
+        t.type = t.value.upper()
     return t
 
 # Define a rule so we can track line numbers

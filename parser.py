@@ -1,9 +1,22 @@
 import ply.yacc as yacc
 from lx import tokens
 
-symbol_table = dict()
-global address
-address = 0
+class Scope:
+    def __init__(self):
+        self.address = 0
+        self.arg_address = 0
+        self.symbol_table = dict()
+        self.args = dict()
+
+    def add_arg(self, arg):
+        self.args[arg] = self.arg_address
+        self.arg_address += 1
+
+    def add_symbol(self, symbol):
+        self.symbol_table[symbol] = self.address
+        self.address += 1
+
+scopes = []
 
 global label_count
 label_count = 0
@@ -12,6 +25,34 @@ precedence = (
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE')
 )
+
+def p_func(p):
+    """functions : function functions
+                | empty
+    """
+    p[0] = []
+
+def p_function(p):
+    """function : FUNC ID LPAREN params RPAREN LBR statements RBR"""
+    print(p[2], len(scopes[-1].symbol_table), p[4], p[7])
+    scopes.pop()
+
+
+def p_params(p):
+    """params : ID plist"""
+    p[0] = [p[1]] + p[2]
+    scopes.append(Scope())
+    for a in p[0]:
+        scopes[-1].add_arg(a)
+
+def p_plist(p):
+    """ plist : COMMA ID plist
+             | empty
+    """
+    if p[1] == ',':
+        p[0] = [p[2]] + p[3]
+    else:
+        p[0] = []
 
 def p_s(p):
     """statements : statement statements
@@ -23,7 +64,10 @@ def p_s(p):
 
 def p_statement(p):
     """statement : attrib
-                | if """
+                | if
+                | while
+                | return
+                """
     p[0] = p[1]
 
 def p_empty(p):
@@ -33,17 +77,37 @@ def p_empty(p):
 def p_if(p):
     """if : IF LPAREN logic RPAREN LBR statements RBR"""
     global label_count
+
     if_end = ('LABEL', 'if-end-' + str(label_count))
     jump = ('JUMP', 'NOT', if_end[1])
     p[0] = ('IF', p[3], jump, p[6], if_end)
+    label_count += 1
+
+def p_while(p):
+    """while : WHILE LPAREN logic RPAREN LBR statements RBR"""
+    global label_count
+
+    while_start = ('LABEL', 'while-start' + str(label_count))
+    while_end = ('LABEL', 'while-end-' + str(label_count))
+    jump = ('JUMP', 'NOT', while_end[1])
+    jump_to = ('JUMP', 'TO', while_start[1])
+    p[0] = ('WHILE', while_start, p[3], jump, p[6], jump_to, while_end)
+    label_count += 1
+
+
+def p_return(p):
+    """return : RETURN logic SEMICOLON"""
+    print(p[1], p[2])
 
 def p_attrib(p):
     """attrib : ID ATTRIB logic SEMICOLON"""
-    global address
-    if p[1] not in symbol_table:
-        symbol_table[p[1]] = address
-        address += 1
-    p[0] = ('POP', 'LOCAL', symbol_table[p[1]], p[3])
+    scope = scopes[-1]
+    if p[1] in scope.args:
+        p[0] = ('POP', 'ARG', scope.args[p[1]], p[3])
+    else:
+        if p[1] not in scope.symbol_table:
+            scope.add_symbol(p[1])
+        p[0] = ('POP', 'LOCAL', scope.symbol_table[p[1]], p[3])
 
 def p_logic(p):
     """logic : logic LT logic"""
@@ -83,9 +147,13 @@ def p_term_number(p):
 
 def p_term_id(p):
     'term : ID'
-    if p[1] not in symbol_table:
+    scope = scopes[-1]
+    if p[1] in scope.symbol_table:
+        p[0] = ('PUSH', 'LOCAL', scope.symbol_table[p[1]])
+    elif p[1] in scope.args:
+        p[0] = ('PUSH', 'ARG', scope.args[p[1]])
+    else:
         raise Exception('symbol not found')
-    p[0] = ('PUSH', 'LOCAL', symbol_table[p[1]])
 
 def p_paren(p):
     'term : LPAREN expression RPAREN'

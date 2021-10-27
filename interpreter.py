@@ -67,3 +67,6 @@ class Interpreter:
             v = self.stack.pop()
             if not v:
                 self.pc = s[2]
+
+        elif s[1] == 'TO':
+            self.pc = s[2]

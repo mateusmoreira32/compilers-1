@@ -2,540 +2,891 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Grammar
 
-Rule 0     S' -> statements
-Rule 1     statements -> statement statements
-Rule 2     statements -> empty
-Rule 3     statement -> attrib
-Rule 4     statement -> if
-Rule 5     empty -> <empty>
-Rule 6     if -> IF LPAREN logic RPAREN LBR statements RBR
-Rule 7     attrib -> ID ATTRIB logic SEMICOLON
-Rule 8     logic -> logic LT logic
-Rule 9     logic -> expression
-Rule 10    expression -> expression PLUS expression
-Rule 11    expression -> expression MINUS expression
-Rule 12    expression -> term
-Rule 13    term -> term TIMES term
-Rule 14    term -> term DIVIDE term
-Rule 15    term -> NUMBER
-Rule 16    term -> ID
-Rule 17    term -> LPAREN expression RPAREN
+Rule 0     S' -> functions
+Rule 1     functions -> function functions
+Rule 2     functions -> empty
+Rule 3     function -> FUNC ID LPAREN params RPAREN LBR statements RBR
+Rule 4     params -> ID plist
+Rule 5     plist -> COMMA ID plist
+Rule 6     plist -> empty
+Rule 7     statements -> statement statements
+Rule 8     statements -> empty
+Rule 9     statement -> attrib
+Rule 10    statement -> if
+Rule 11    statement -> while
+Rule 12    statement -> return
+Rule 13    empty -> <empty>
+Rule 14    if -> IF LPAREN logic RPAREN LBR statements RBR
+Rule 15    while -> WHILE LPAREN logic RPAREN LBR statements RBR
+Rule 16    return -> RETURN logic SEMICOLON
+Rule 17    attrib -> ID ATTRIB logic SEMICOLON
+Rule 18    logic -> logic LT logic
+Rule 19    logic -> expression
+Rule 20    expression -> expression PLUS expression
+Rule 21    expression -> expression MINUS expression
+Rule 22    expression -> term
+Rule 23    term -> term TIMES term
+Rule 24    term -> term DIVIDE term
+Rule 25    term -> NUMBER
+Rule 26    term -> ID
+Rule 27    term -> LPAREN expression RPAREN
 
 Terminals, with rules where they appear
 
-ATTRIB               : 7
-DIVIDE               : 14
-ID                   : 7 16
-IF                   : 6
-LBR                  : 6
-LPAREN               : 6 17
-LT                   : 8
-MINUS                : 11
-NUMBER               : 15
-PLUS                 : 10
-RBR                  : 6
-RPAREN               : 6 17
-SEMICOLON            : 7
-TIMES                : 13
+ATTRIB               : 17
+COMMA                : 5
+DIVIDE               : 24
+FUNC                 : 3
+ID                   : 3 4 5 17 26
+IF                   : 14
+LBR                  : 3 14 15
+LPAREN               : 3 14 15 27
+LT                   : 18
+MINUS                : 21
+NUMBER               : 25
+PLUS                 : 20
+RBR                  : 3 14 15
+RETURN               : 16
+RPAREN               : 3 14 15 27
+SEMICOLON            : 16 17
+TIMES                : 23
+WHILE                : 15
 error                : 
 
 Nonterminals, with rules where they appear
 
-attrib               : 3
-empty                : 2
-expression           : 9 10 10 11 11 17
-if                   : 4
-logic                : 6 7 8 8
-statement            : 1
-statements           : 1 6 0
-term                 : 12 13 13 14 14
+attrib               : 9
+empty                : 2 6 8
+expression           : 19 20 20 21 21 27
+function             : 1
+functions            : 1 0
+if                   : 10
+logic                : 14 15 16 17 18 18
+params               : 3
+plist                : 4 5
+return               : 12
+statement            : 7
+statements           : 3 7 14 15
+term                 : 22 23 23 24 24
+while                : 11
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statements
-    (1) statements -> . statement statements
-    (2) statements -> . empty
-    (3) statement -> . attrib
-    (4) statement -> . if
-    (5) empty -> .
-    (7) attrib -> . ID ATTRIB logic SEMICOLON
-    (6) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (0) S' -> . functions
+    (1) functions -> . function functions
+    (2) functions -> . empty
+    (3) function -> . FUNC ID LPAREN params RPAREN LBR statements RBR
+    (13) empty -> .
 
-    $end            reduce using rule 5 (empty -> .)
-    ID              shift and go to state 6
-    IF              shift and go to state 7
+    FUNC            shift and go to state 4
+    $end            reduce using rule 13 (empty -> .)
 
-    statements                     shift and go to state 1
-    statement                      shift and go to state 2
+    functions                      shift and go to state 1
+    function                       shift and go to state 2
     empty                          shift and go to state 3
-    attrib                         shift and go to state 4
-    if                             shift and go to state 5
 
 state 1
 
-    (0) S' -> statements .
+    (0) S' -> functions .
 
 
 
 state 2
 
-    (1) statements -> statement . statements
-    (1) statements -> . statement statements
-    (2) statements -> . empty
-    (3) statement -> . attrib
-    (4) statement -> . if
-    (5) empty -> .
-    (7) attrib -> . ID ATTRIB logic SEMICOLON
-    (6) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (1) functions -> function . functions
+    (1) functions -> . function functions
+    (2) functions -> . empty
+    (3) function -> . FUNC ID LPAREN params RPAREN LBR statements RBR
+    (13) empty -> .
 
-    $end            reduce using rule 5 (empty -> .)
-    RBR             reduce using rule 5 (empty -> .)
-    ID              shift and go to state 6
-    IF              shift and go to state 7
+    FUNC            shift and go to state 4
+    $end            reduce using rule 13 (empty -> .)
 
-    statement                      shift and go to state 2
-    statements                     shift and go to state 8
+    function                       shift and go to state 2
+    functions                      shift and go to state 5
     empty                          shift and go to state 3
-    attrib                         shift and go to state 4
-    if                             shift and go to state 5
 
 state 3
 
-    (2) statements -> empty .
+    (2) functions -> empty .
 
-    $end            reduce using rule 2 (statements -> empty .)
-    RBR             reduce using rule 2 (statements -> empty .)
+    $end            reduce using rule 2 (functions -> empty .)
 
 
 state 4
 
-    (3) statement -> attrib .
+    (3) function -> FUNC . ID LPAREN params RPAREN LBR statements RBR
 
-    ID              reduce using rule 3 (statement -> attrib .)
-    IF              reduce using rule 3 (statement -> attrib .)
-    $end            reduce using rule 3 (statement -> attrib .)
-    RBR             reduce using rule 3 (statement -> attrib .)
+    ID              shift and go to state 6
 
 
 state 5
 
-    (4) statement -> if .
+    (1) functions -> function functions .
 
-    ID              reduce using rule 4 (statement -> if .)
-    IF              reduce using rule 4 (statement -> if .)
-    $end            reduce using rule 4 (statement -> if .)
-    RBR             reduce using rule 4 (statement -> if .)
+    $end            reduce using rule 1 (functions -> function functions .)
 
 
 state 6
 
-    (7) attrib -> ID . ATTRIB logic SEMICOLON
+    (3) function -> FUNC ID . LPAREN params RPAREN LBR statements RBR
 
-    ATTRIB          shift and go to state 9
+    LPAREN          shift and go to state 7
 
 
 state 7
 
-    (6) if -> IF . LPAREN logic RPAREN LBR statements RBR
+    (3) function -> FUNC ID LPAREN . params RPAREN LBR statements RBR
+    (4) params -> . ID plist
 
-    LPAREN          shift and go to state 10
+    ID              shift and go to state 8
 
+    params                         shift and go to state 9
 
 state 8
 
-    (1) statements -> statement statements .
+    (4) params -> ID . plist
+    (5) plist -> . COMMA ID plist
+    (6) plist -> . empty
+    (13) empty -> .
 
-    $end            reduce using rule 1 (statements -> statement statements .)
-    RBR             reduce using rule 1 (statements -> statement statements .)
+    COMMA           shift and go to state 11
+    RPAREN          reduce using rule 13 (empty -> .)
 
+    plist                          shift and go to state 10
+    empty                          shift and go to state 12
 
 state 9
 
-    (7) attrib -> ID ATTRIB . logic SEMICOLON
-    (8) logic -> . logic LT logic
-    (9) logic -> . expression
-    (10) expression -> . expression PLUS expression
-    (11) expression -> . expression MINUS expression
-    (12) expression -> . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (3) function -> FUNC ID LPAREN params . RPAREN LBR statements RBR
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    RPAREN          shift and go to state 13
 
-    logic                          shift and go to state 12
-    expression                     shift and go to state 13
-    term                           shift and go to state 14
 
 state 10
 
-    (6) if -> IF LPAREN . logic RPAREN LBR statements RBR
-    (8) logic -> . logic LT logic
-    (9) logic -> . expression
-    (10) expression -> . expression PLUS expression
-    (11) expression -> . expression MINUS expression
-    (12) expression -> . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (4) params -> ID plist .
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    RPAREN          reduce using rule 4 (params -> ID plist .)
 
-    logic                          shift and go to state 17
-    expression                     shift and go to state 13
-    term                           shift and go to state 14
 
 state 11
 
-    (16) term -> ID .
+    (5) plist -> COMMA . ID plist
 
-    TIMES           reduce using rule 16 (term -> ID .)
-    DIVIDE          reduce using rule 16 (term -> ID .)
-    PLUS            reduce using rule 16 (term -> ID .)
-    MINUS           reduce using rule 16 (term -> ID .)
-    SEMICOLON       reduce using rule 16 (term -> ID .)
-    LT              reduce using rule 16 (term -> ID .)
-    RPAREN          reduce using rule 16 (term -> ID .)
+    ID              shift and go to state 14
 
 
 state 12
 
-    (7) attrib -> ID ATTRIB logic . SEMICOLON
-    (8) logic -> logic . LT logic
+    (6) plist -> empty .
 
-    SEMICOLON       shift and go to state 18
-    LT              shift and go to state 19
+    RPAREN          reduce using rule 6 (plist -> empty .)
 
 
 state 13
 
-    (9) logic -> expression .
-    (10) expression -> expression . PLUS expression
-    (11) expression -> expression . MINUS expression
+    (3) function -> FUNC ID LPAREN params RPAREN . LBR statements RBR
 
-    SEMICOLON       reduce using rule 9 (logic -> expression .)
-    LT              reduce using rule 9 (logic -> expression .)
-    RPAREN          reduce using rule 9 (logic -> expression .)
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
+    LBR             shift and go to state 15
 
 
 state 14
 
-    (12) expression -> term .
-    (13) term -> term . TIMES term
-    (14) term -> term . DIVIDE term
+    (5) plist -> COMMA ID . plist
+    (5) plist -> . COMMA ID plist
+    (6) plist -> . empty
+    (13) empty -> .
 
-    PLUS            reduce using rule 12 (expression -> term .)
-    MINUS           reduce using rule 12 (expression -> term .)
-    SEMICOLON       reduce using rule 12 (expression -> term .)
-    LT              reduce using rule 12 (expression -> term .)
-    RPAREN          reduce using rule 12 (expression -> term .)
-    TIMES           shift and go to state 22
-    DIVIDE          shift and go to state 23
+    COMMA           shift and go to state 11
+    RPAREN          reduce using rule 13 (empty -> .)
 
+    plist                          shift and go to state 16
+    empty                          shift and go to state 12
 
 state 15
 
-    (15) term -> NUMBER .
+    (3) function -> FUNC ID LPAREN params RPAREN LBR . statements RBR
+    (7) statements -> . statement statements
+    (8) statements -> . empty
+    (9) statement -> . attrib
+    (10) statement -> . if
+    (11) statement -> . while
+    (12) statement -> . return
+    (13) empty -> .
+    (17) attrib -> . ID ATTRIB logic SEMICOLON
+    (14) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (15) while -> . WHILE LPAREN logic RPAREN LBR statements RBR
+    (16) return -> . RETURN logic SEMICOLON
 
-    TIMES           reduce using rule 15 (term -> NUMBER .)
-    DIVIDE          reduce using rule 15 (term -> NUMBER .)
-    PLUS            reduce using rule 15 (term -> NUMBER .)
-    MINUS           reduce using rule 15 (term -> NUMBER .)
-    SEMICOLON       reduce using rule 15 (term -> NUMBER .)
-    LT              reduce using rule 15 (term -> NUMBER .)
-    RPAREN          reduce using rule 15 (term -> NUMBER .)
+    RBR             reduce using rule 13 (empty -> .)
+    ID              shift and go to state 17
+    IF              shift and go to state 25
+    WHILE           shift and go to state 26
+    RETURN          shift and go to state 27
 
+    statements                     shift and go to state 18
+    statement                      shift and go to state 19
+    empty                          shift and go to state 20
+    attrib                         shift and go to state 21
+    if                             shift and go to state 22
+    while                          shift and go to state 23
+    return                         shift and go to state 24
 
 state 16
 
-    (17) term -> LPAREN . expression RPAREN
-    (10) expression -> . expression PLUS expression
-    (11) expression -> . expression MINUS expression
-    (12) expression -> . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (5) plist -> COMMA ID plist .
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    RPAREN          reduce using rule 5 (plist -> COMMA ID plist .)
 
-    expression                     shift and go to state 24
-    term                           shift and go to state 14
 
 state 17
 
-    (6) if -> IF LPAREN logic . RPAREN LBR statements RBR
-    (8) logic -> logic . LT logic
+    (17) attrib -> ID . ATTRIB logic SEMICOLON
 
-    RPAREN          shift and go to state 25
-    LT              shift and go to state 19
+    ATTRIB          shift and go to state 28
 
 
 state 18
 
-    (7) attrib -> ID ATTRIB logic SEMICOLON .
+    (3) function -> FUNC ID LPAREN params RPAREN LBR statements . RBR
 
-    ID              reduce using rule 7 (attrib -> ID ATTRIB logic SEMICOLON .)
-    IF              reduce using rule 7 (attrib -> ID ATTRIB logic SEMICOLON .)
-    $end            reduce using rule 7 (attrib -> ID ATTRIB logic SEMICOLON .)
-    RBR             reduce using rule 7 (attrib -> ID ATTRIB logic SEMICOLON .)
+    RBR             shift and go to state 29
 
 
 state 19
 
-    (8) logic -> logic LT . logic
-    (8) logic -> . logic LT logic
-    (9) logic -> . expression
-    (10) expression -> . expression PLUS expression
-    (11) expression -> . expression MINUS expression
-    (12) expression -> . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (7) statements -> statement . statements
+    (7) statements -> . statement statements
+    (8) statements -> . empty
+    (9) statement -> . attrib
+    (10) statement -> . if
+    (11) statement -> . while
+    (12) statement -> . return
+    (13) empty -> .
+    (17) attrib -> . ID ATTRIB logic SEMICOLON
+    (14) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (15) while -> . WHILE LPAREN logic RPAREN LBR statements RBR
+    (16) return -> . RETURN logic SEMICOLON
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    RBR             reduce using rule 13 (empty -> .)
+    ID              shift and go to state 17
+    IF              shift and go to state 25
+    WHILE           shift and go to state 26
+    RETURN          shift and go to state 27
 
-    logic                          shift and go to state 26
-    expression                     shift and go to state 13
-    term                           shift and go to state 14
+    statement                      shift and go to state 19
+    statements                     shift and go to state 30
+    empty                          shift and go to state 20
+    attrib                         shift and go to state 21
+    if                             shift and go to state 22
+    while                          shift and go to state 23
+    return                         shift and go to state 24
 
 state 20
 
-    (10) expression -> expression PLUS . expression
-    (10) expression -> . expression PLUS expression
-    (11) expression -> . expression MINUS expression
-    (12) expression -> . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (8) statements -> empty .
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    RBR             reduce using rule 8 (statements -> empty .)
 
-    expression                     shift and go to state 27
-    term                           shift and go to state 14
 
 state 21
 
-    (11) expression -> expression MINUS . expression
-    (10) expression -> . expression PLUS expression
-    (11) expression -> . expression MINUS expression
-    (12) expression -> . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (9) statement -> attrib .
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    ID              reduce using rule 9 (statement -> attrib .)
+    IF              reduce using rule 9 (statement -> attrib .)
+    WHILE           reduce using rule 9 (statement -> attrib .)
+    RETURN          reduce using rule 9 (statement -> attrib .)
+    RBR             reduce using rule 9 (statement -> attrib .)
 
-    expression                     shift and go to state 28
-    term                           shift and go to state 14
 
 state 22
 
-    (13) term -> term TIMES . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (10) statement -> if .
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    ID              reduce using rule 10 (statement -> if .)
+    IF              reduce using rule 10 (statement -> if .)
+    WHILE           reduce using rule 10 (statement -> if .)
+    RETURN          reduce using rule 10 (statement -> if .)
+    RBR             reduce using rule 10 (statement -> if .)
 
-    term                           shift and go to state 29
 
 state 23
 
-    (14) term -> term DIVIDE . term
-    (13) term -> . term TIMES term
-    (14) term -> . term DIVIDE term
-    (15) term -> . NUMBER
-    (16) term -> . ID
-    (17) term -> . LPAREN expression RPAREN
+    (11) statement -> while .
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 11
-    LPAREN          shift and go to state 16
+    ID              reduce using rule 11 (statement -> while .)
+    IF              reduce using rule 11 (statement -> while .)
+    WHILE           reduce using rule 11 (statement -> while .)
+    RETURN          reduce using rule 11 (statement -> while .)
+    RBR             reduce using rule 11 (statement -> while .)
 
-    term                           shift and go to state 30
 
 state 24
 
-    (17) term -> LPAREN expression . RPAREN
-    (10) expression -> expression . PLUS expression
-    (11) expression -> expression . MINUS expression
+    (12) statement -> return .
 
-    RPAREN          shift and go to state 31
-    PLUS            shift and go to state 20
-    MINUS           shift and go to state 21
+    ID              reduce using rule 12 (statement -> return .)
+    IF              reduce using rule 12 (statement -> return .)
+    WHILE           reduce using rule 12 (statement -> return .)
+    RETURN          reduce using rule 12 (statement -> return .)
+    RBR             reduce using rule 12 (statement -> return .)
 
 
 state 25
 
-    (6) if -> IF LPAREN logic RPAREN . LBR statements RBR
+    (14) if -> IF . LPAREN logic RPAREN LBR statements RBR
 
-    LBR             shift and go to state 32
+    LPAREN          shift and go to state 31
 
 
 state 26
 
-    (8) logic -> logic LT logic .
-    (8) logic -> logic . LT logic
+    (15) while -> WHILE . LPAREN logic RPAREN LBR statements RBR
 
-  ! shift/reduce conflict for LT resolved as shift
-    SEMICOLON       reduce using rule 8 (logic -> logic LT logic .)
-    RPAREN          reduce using rule 8 (logic -> logic LT logic .)
-    LT              shift and go to state 19
-
-  ! LT              [ reduce using rule 8 (logic -> logic LT logic .) ]
+    LPAREN          shift and go to state 32
 
 
 state 27
 
-    (10) expression -> expression PLUS expression .
-    (10) expression -> expression . PLUS expression
-    (11) expression -> expression . MINUS expression
+    (16) return -> RETURN . logic SEMICOLON
+    (18) logic -> . logic LT logic
+    (19) logic -> . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
 
-    PLUS            reduce using rule 10 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 10 (expression -> expression PLUS expression .)
-    SEMICOLON       reduce using rule 10 (expression -> expression PLUS expression .)
-    LT              reduce using rule 10 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 10 (expression -> expression PLUS expression .)
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
 
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-
+    logic                          shift and go to state 33
+    expression                     shift and go to state 34
+    term                           shift and go to state 35
 
 state 28
 
-    (11) expression -> expression MINUS expression .
-    (10) expression -> expression . PLUS expression
-    (11) expression -> expression . MINUS expression
+    (17) attrib -> ID ATTRIB . logic SEMICOLON
+    (18) logic -> . logic LT logic
+    (19) logic -> . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
 
-    PLUS            reduce using rule 11 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 11 (expression -> expression MINUS expression .)
-    SEMICOLON       reduce using rule 11 (expression -> expression MINUS expression .)
-    LT              reduce using rule 11 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 11 (expression -> expression MINUS expression .)
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
 
-  ! PLUS            [ shift and go to state 20 ]
-  ! MINUS           [ shift and go to state 21 ]
-
+    logic                          shift and go to state 39
+    expression                     shift and go to state 34
+    term                           shift and go to state 35
 
 state 29
 
-    (13) term -> term TIMES term .
-    (13) term -> term . TIMES term
-    (14) term -> term . DIVIDE term
+    (3) function -> FUNC ID LPAREN params RPAREN LBR statements RBR .
 
-    TIMES           reduce using rule 13 (term -> term TIMES term .)
-    DIVIDE          reduce using rule 13 (term -> term TIMES term .)
-    PLUS            reduce using rule 13 (term -> term TIMES term .)
-    MINUS           reduce using rule 13 (term -> term TIMES term .)
-    SEMICOLON       reduce using rule 13 (term -> term TIMES term .)
-    LT              reduce using rule 13 (term -> term TIMES term .)
-    RPAREN          reduce using rule 13 (term -> term TIMES term .)
-
-  ! TIMES           [ shift and go to state 22 ]
-  ! DIVIDE          [ shift and go to state 23 ]
+    FUNC            reduce using rule 3 (function -> FUNC ID LPAREN params RPAREN LBR statements RBR .)
+    $end            reduce using rule 3 (function -> FUNC ID LPAREN params RPAREN LBR statements RBR .)
 
 
 state 30
 
-    (14) term -> term DIVIDE term .
-    (13) term -> term . TIMES term
-    (14) term -> term . DIVIDE term
+    (7) statements -> statement statements .
 
-    TIMES           reduce using rule 14 (term -> term DIVIDE term .)
-    DIVIDE          reduce using rule 14 (term -> term DIVIDE term .)
-    PLUS            reduce using rule 14 (term -> term DIVIDE term .)
-    MINUS           reduce using rule 14 (term -> term DIVIDE term .)
-    SEMICOLON       reduce using rule 14 (term -> term DIVIDE term .)
-    LT              reduce using rule 14 (term -> term DIVIDE term .)
-    RPAREN          reduce using rule 14 (term -> term DIVIDE term .)
-
-  ! TIMES           [ shift and go to state 22 ]
-  ! DIVIDE          [ shift and go to state 23 ]
+    RBR             reduce using rule 7 (statements -> statement statements .)
 
 
 state 31
 
-    (17) term -> LPAREN expression RPAREN .
+    (14) if -> IF LPAREN . logic RPAREN LBR statements RBR
+    (18) logic -> . logic LT logic
+    (19) logic -> . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
 
-    TIMES           reduce using rule 17 (term -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 17 (term -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 17 (term -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 17 (term -> LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 17 (term -> LPAREN expression RPAREN .)
-    LT              reduce using rule 17 (term -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 17 (term -> LPAREN expression RPAREN .)
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
 
+    logic                          shift and go to state 40
+    expression                     shift and go to state 34
+    term                           shift and go to state 35
 
 state 32
 
-    (6) if -> IF LPAREN logic RPAREN LBR . statements RBR
-    (1) statements -> . statement statements
-    (2) statements -> . empty
-    (3) statement -> . attrib
-    (4) statement -> . if
-    (5) empty -> .
-    (7) attrib -> . ID ATTRIB logic SEMICOLON
-    (6) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (15) while -> WHILE LPAREN . logic RPAREN LBR statements RBR
+    (18) logic -> . logic LT logic
+    (19) logic -> . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
 
-    RBR             reduce using rule 5 (empty -> .)
-    ID              shift and go to state 6
-    IF              shift and go to state 7
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
 
-    statements                     shift and go to state 33
-    statement                      shift and go to state 2
-    empty                          shift and go to state 3
-    attrib                         shift and go to state 4
-    if                             shift and go to state 5
+    logic                          shift and go to state 41
+    expression                     shift and go to state 34
+    term                           shift and go to state 35
 
 state 33
 
-    (6) if -> IF LPAREN logic RPAREN LBR statements . RBR
+    (16) return -> RETURN logic . SEMICOLON
+    (18) logic -> logic . LT logic
 
-    RBR             shift and go to state 34
+    SEMICOLON       shift and go to state 42
+    LT              shift and go to state 43
 
 
 state 34
 
-    (6) if -> IF LPAREN logic RPAREN LBR statements RBR .
+    (19) logic -> expression .
+    (20) expression -> expression . PLUS expression
+    (21) expression -> expression . MINUS expression
 
-    ID              reduce using rule 6 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
-    IF              reduce using rule 6 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
-    $end            reduce using rule 6 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
-    RBR             reduce using rule 6 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
+    SEMICOLON       reduce using rule 19 (logic -> expression .)
+    LT              reduce using rule 19 (logic -> expression .)
+    RPAREN          reduce using rule 19 (logic -> expression .)
+    PLUS            shift and go to state 44
+    MINUS           shift and go to state 45
+
+
+state 35
+
+    (22) expression -> term .
+    (23) term -> term . TIMES term
+    (24) term -> term . DIVIDE term
+
+    PLUS            reduce using rule 22 (expression -> term .)
+    MINUS           reduce using rule 22 (expression -> term .)
+    SEMICOLON       reduce using rule 22 (expression -> term .)
+    LT              reduce using rule 22 (expression -> term .)
+    RPAREN          reduce using rule 22 (expression -> term .)
+    TIMES           shift and go to state 46
+    DIVIDE          shift and go to state 47
+
+
+state 36
+
+    (25) term -> NUMBER .
+
+    TIMES           reduce using rule 25 (term -> NUMBER .)
+    DIVIDE          reduce using rule 25 (term -> NUMBER .)
+    PLUS            reduce using rule 25 (term -> NUMBER .)
+    MINUS           reduce using rule 25 (term -> NUMBER .)
+    SEMICOLON       reduce using rule 25 (term -> NUMBER .)
+    LT              reduce using rule 25 (term -> NUMBER .)
+    RPAREN          reduce using rule 25 (term -> NUMBER .)
+
+
+state 37
+
+    (26) term -> ID .
+
+    TIMES           reduce using rule 26 (term -> ID .)
+    DIVIDE          reduce using rule 26 (term -> ID .)
+    PLUS            reduce using rule 26 (term -> ID .)
+    MINUS           reduce using rule 26 (term -> ID .)
+    SEMICOLON       reduce using rule 26 (term -> ID .)
+    LT              reduce using rule 26 (term -> ID .)
+    RPAREN          reduce using rule 26 (term -> ID .)
+
+
+state 38
+
+    (27) term -> LPAREN . expression RPAREN
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
+
+    expression                     shift and go to state 48
+    term                           shift and go to state 35
+
+state 39
+
+    (17) attrib -> ID ATTRIB logic . SEMICOLON
+    (18) logic -> logic . LT logic
+
+    SEMICOLON       shift and go to state 49
+    LT              shift and go to state 43
+
+
+state 40
+
+    (14) if -> IF LPAREN logic . RPAREN LBR statements RBR
+    (18) logic -> logic . LT logic
+
+    RPAREN          shift and go to state 50
+    LT              shift and go to state 43
+
+
+state 41
+
+    (15) while -> WHILE LPAREN logic . RPAREN LBR statements RBR
+    (18) logic -> logic . LT logic
+
+    RPAREN          shift and go to state 51
+    LT              shift and go to state 43
+
+
+state 42
+
+    (16) return -> RETURN logic SEMICOLON .
+
+    ID              reduce using rule 16 (return -> RETURN logic SEMICOLON .)
+    IF              reduce using rule 16 (return -> RETURN logic SEMICOLON .)
+    WHILE           reduce using rule 16 (return -> RETURN logic SEMICOLON .)
+    RETURN          reduce using rule 16 (return -> RETURN logic SEMICOLON .)
+    RBR             reduce using rule 16 (return -> RETURN logic SEMICOLON .)
+
+
+state 43
+
+    (18) logic -> logic LT . logic
+    (18) logic -> . logic LT logic
+    (19) logic -> . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
+
+    logic                          shift and go to state 52
+    expression                     shift and go to state 34
+    term                           shift and go to state 35
+
+state 44
+
+    (20) expression -> expression PLUS . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
+
+    expression                     shift and go to state 53
+    term                           shift and go to state 35
+
+state 45
+
+    (21) expression -> expression MINUS . expression
+    (20) expression -> . expression PLUS expression
+    (21) expression -> . expression MINUS expression
+    (22) expression -> . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
+
+    expression                     shift and go to state 54
+    term                           shift and go to state 35
+
+state 46
+
+    (23) term -> term TIMES . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
+
+    term                           shift and go to state 55
+
+state 47
+
+    (24) term -> term DIVIDE . term
+    (23) term -> . term TIMES term
+    (24) term -> . term DIVIDE term
+    (25) term -> . NUMBER
+    (26) term -> . ID
+    (27) term -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 36
+    ID              shift and go to state 37
+    LPAREN          shift and go to state 38
+
+    term                           shift and go to state 56
+
+state 48
+
+    (27) term -> LPAREN expression . RPAREN
+    (20) expression -> expression . PLUS expression
+    (21) expression -> expression . MINUS expression
+
+    RPAREN          shift and go to state 57
+    PLUS            shift and go to state 44
+    MINUS           shift and go to state 45
+
+
+state 49
+
+    (17) attrib -> ID ATTRIB logic SEMICOLON .
+
+    ID              reduce using rule 17 (attrib -> ID ATTRIB logic SEMICOLON .)
+    IF              reduce using rule 17 (attrib -> ID ATTRIB logic SEMICOLON .)
+    WHILE           reduce using rule 17 (attrib -> ID ATTRIB logic SEMICOLON .)
+    RETURN          reduce using rule 17 (attrib -> ID ATTRIB logic SEMICOLON .)
+    RBR             reduce using rule 17 (attrib -> ID ATTRIB logic SEMICOLON .)
+
+
+state 50
+
+    (14) if -> IF LPAREN logic RPAREN . LBR statements RBR
+
+    LBR             shift and go to state 58
+
+
+state 51
+
+    (15) while -> WHILE LPAREN logic RPAREN . LBR statements RBR
+
+    LBR             shift and go to state 59
+
+
+state 52
+
+    (18) logic -> logic LT logic .
+    (18) logic -> logic . LT logic
+
+  ! shift/reduce conflict for LT resolved as shift
+    SEMICOLON       reduce using rule 18 (logic -> logic LT logic .)
+    RPAREN          reduce using rule 18 (logic -> logic LT logic .)
+    LT              shift and go to state 43
+
+  ! LT              [ reduce using rule 18 (logic -> logic LT logic .) ]
+
+
+state 53
+
+    (20) expression -> expression PLUS expression .
+    (20) expression -> expression . PLUS expression
+    (21) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 20 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 20 (expression -> expression PLUS expression .)
+    SEMICOLON       reduce using rule 20 (expression -> expression PLUS expression .)
+    LT              reduce using rule 20 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 20 (expression -> expression PLUS expression .)
+
+  ! PLUS            [ shift and go to state 44 ]
+  ! MINUS           [ shift and go to state 45 ]
+
+
+state 54
+
+    (21) expression -> expression MINUS expression .
+    (20) expression -> expression . PLUS expression
+    (21) expression -> expression . MINUS expression
+
+    PLUS            reduce using rule 21 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 21 (expression -> expression MINUS expression .)
+    SEMICOLON       reduce using rule 21 (expression -> expression MINUS expression .)
+    LT              reduce using rule 21 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 21 (expression -> expression MINUS expression .)
+
+  ! PLUS            [ shift and go to state 44 ]
+  ! MINUS           [ shift and go to state 45 ]
+
+
+state 55
+
+    (23) term -> term TIMES term .
+    (23) term -> term . TIMES term
+    (24) term -> term . DIVIDE term
+
+    TIMES           reduce using rule 23 (term -> term TIMES term .)
+    DIVIDE          reduce using rule 23 (term -> term TIMES term .)
+    PLUS            reduce using rule 23 (term -> term TIMES term .)
+    MINUS           reduce using rule 23 (term -> term TIMES term .)
+    SEMICOLON       reduce using rule 23 (term -> term TIMES term .)
+    LT              reduce using rule 23 (term -> term TIMES term .)
+    RPAREN          reduce using rule 23 (term -> term TIMES term .)
+
+  ! TIMES           [ shift and go to state 46 ]
+  ! DIVIDE          [ shift and go to state 47 ]
+
+
+state 56
+
+    (24) term -> term DIVIDE term .
+    (23) term -> term . TIMES term
+    (24) term -> term . DIVIDE term
+
+    TIMES           reduce using rule 24 (term -> term DIVIDE term .)
+    DIVIDE          reduce using rule 24 (term -> term DIVIDE term .)
+    PLUS            reduce using rule 24 (term -> term DIVIDE term .)
+    MINUS           reduce using rule 24 (term -> term DIVIDE term .)
+    SEMICOLON       reduce using rule 24 (term -> term DIVIDE term .)
+    LT              reduce using rule 24 (term -> term DIVIDE term .)
+    RPAREN          reduce using rule 24 (term -> term DIVIDE term .)
+
+  ! TIMES           [ shift and go to state 46 ]
+  ! DIVIDE          [ shift and go to state 47 ]
+
+
+state 57
+
+    (27) term -> LPAREN expression RPAREN .
+
+    TIMES           reduce using rule 27 (term -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 27 (term -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 27 (term -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 27 (term -> LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 27 (term -> LPAREN expression RPAREN .)
+    LT              reduce using rule 27 (term -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 27 (term -> LPAREN expression RPAREN .)
+
+
+state 58
+
+    (14) if -> IF LPAREN logic RPAREN LBR . statements RBR
+    (7) statements -> . statement statements
+    (8) statements -> . empty
+    (9) statement -> . attrib
+    (10) statement -> . if
+    (11) statement -> . while
+    (12) statement -> . return
+    (13) empty -> .
+    (17) attrib -> . ID ATTRIB logic SEMICOLON
+    (14) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (15) while -> . WHILE LPAREN logic RPAREN LBR statements RBR
+    (16) return -> . RETURN logic SEMICOLON
+
+    RBR             reduce using rule 13 (empty -> .)
+    ID              shift and go to state 17
+    IF              shift and go to state 25
+    WHILE           shift and go to state 26
+    RETURN          shift and go to state 27
+
+    statements                     shift and go to state 60
+    statement                      shift and go to state 19
+    empty                          shift and go to state 20
+    attrib                         shift and go to state 21
+    if                             shift and go to state 22
+    while                          shift and go to state 23
+    return                         shift and go to state 24
+
+state 59
+
+    (15) while -> WHILE LPAREN logic RPAREN LBR . statements RBR
+    (7) statements -> . statement statements
+    (8) statements -> . empty
+    (9) statement -> . attrib
+    (10) statement -> . if
+    (11) statement -> . while
+    (12) statement -> . return
+    (13) empty -> .
+    (17) attrib -> . ID ATTRIB logic SEMICOLON
+    (14) if -> . IF LPAREN logic RPAREN LBR statements RBR
+    (15) while -> . WHILE LPAREN logic RPAREN LBR statements RBR
+    (16) return -> . RETURN logic SEMICOLON
+
+    RBR             reduce using rule 13 (empty -> .)
+    ID              shift and go to state 17
+    IF              shift and go to state 25
+    WHILE           shift and go to state 26
+    RETURN          shift and go to state 27
+
+    statements                     shift and go to state 61
+    statement                      shift and go to state 19
+    empty                          shift and go to state 20
+    attrib                         shift and go to state 21
+    if                             shift and go to state 22
+    while                          shift and go to state 23
+    return                         shift and go to state 24
+
+state 60
+
+    (14) if -> IF LPAREN logic RPAREN LBR statements . RBR
+
+    RBR             shift and go to state 62
+
+
+state 61
+
+    (15) while -> WHILE LPAREN logic RPAREN LBR statements . RBR
+
+    RBR             shift and go to state 63
+
+
+state 62
+
+    (14) if -> IF LPAREN logic RPAREN LBR statements RBR .
+
+    ID              reduce using rule 14 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
+    IF              reduce using rule 14 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
+    WHILE           reduce using rule 14 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
+    RETURN          reduce using rule 14 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
+    RBR             reduce using rule 14 (if -> IF LPAREN logic RPAREN LBR statements RBR .)
+
+
+state 63
+
+    (15) while -> WHILE LPAREN logic RPAREN LBR statements RBR .
+
+    ID              reduce using rule 15 (while -> WHILE LPAREN logic RPAREN LBR statements RBR .)
+    IF              reduce using rule 15 (while -> WHILE LPAREN logic RPAREN LBR statements RBR .)
+    WHILE           reduce using rule 15 (while -> WHILE LPAREN logic RPAREN LBR statements RBR .)
+    RETURN          reduce using rule 15 (while -> WHILE LPAREN logic RPAREN LBR statements RBR .)
+    RBR             reduce using rule 15 (while -> WHILE LPAREN logic RPAREN LBR statements RBR .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for LT in state 26 resolved as shift
+WARNING: shift/reduce conflict for LT in state 52 resolved as shift
