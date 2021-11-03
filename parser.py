@@ -30,16 +30,47 @@ def p_func(p):
     """functions : function functions
                 | empty
     """
-    p[0] = []
+    if len(p) > 2:
+        p[0] = [p[1]] + p[2]
+    elif p[1] is not None:
+        p[0] = [p[1]]
+    else:
+        p[0] = []
+
 
 def p_function(p):
     """function : FUNC ID LPAREN params RPAREN LBR statements RBR"""
-    print(p[2], len(scopes[-1].symbol_table), p[4], p[7])
+    p[0] = ('FUNC', p[2], len(scopes[-1].symbol_table), p[7])
     scopes.pop()
 
 
+def p_params_call(p):
+    """pcall : logic pclist
+             | empty
+    """
+    if p[1] is None:
+        p[0] = []
+        return
+    p[0] = [p[1]] + p[2]
+
+
+def p_pclist(p):
+    """ pclist : COMMA logic pclist
+             | empty
+    """
+    if p[1] == ',':
+        p[0] = [p[2]] + p[3]
+    else:
+        p[0] = []
+
 def p_params(p):
-    """params : ID plist"""
+    """params : ID plist
+              | empty
+    """
+    if p[1] is None:
+        p[0] = []
+        return
+
     p[0] = [p[1]] + p[2]
     scopes.append(Scope())
     for a in p[0]:
@@ -97,7 +128,7 @@ def p_while(p):
 
 def p_return(p):
     """return : RETURN logic SEMICOLON"""
-    print(p[1], p[2])
+    p[0] = ('RETURN', p[2])
 
 def p_attrib(p):
     """attrib : ID ATTRIB logic SEMICOLON"""
@@ -141,6 +172,10 @@ def p_term_div(p):
 
     p[0] = ('DIV', p[1], p[3])
 
+def p_term_call(p):
+    """term : call"""
+    p[0] = p[1]
+
 def p_term_number(p):
     'term : NUMBER'
     p[0] = ('PUSH', 'CONSTANT', p[1])
@@ -154,6 +189,10 @@ def p_term_id(p):
         p[0] = ('PUSH', 'ARG', scope.args[p[1]])
     else:
         raise Exception('symbol not found')
+
+def p_call(p):
+    'call : ID LPAREN pcall RPAREN '
+    p[0] = ('CALL', p[1], p[3])
 
 def p_paren(p):
     'term : LPAREN expression RPAREN'
